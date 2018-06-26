@@ -9,9 +9,9 @@ if __name__ == "__main__":
 
             exchange="",
             routing_key="importers",
-            body=json.dumps({'from':'andresbenavides404@gmail.com',
-                 'destine': 'andresbenavides404@gmail.com',
-                 'body': ' hi andres'})
+            body=json.dumps({'from':'ivanspoof@gmail.com',
+                             'destine':'ivanspoof@gmail.com',
+                             'body': 'hi andres'})
         )
 
         print("END")
