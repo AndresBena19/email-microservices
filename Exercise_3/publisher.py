@@ -10,7 +10,7 @@ if __name__ == "__main__":
         channel.basic_publish(
 
             exchange="logs",
-            routing_key="Error",
+            routing_key="Info",
             body=json.dumps({'type':'Debug',
                              'code':'12345',
                              'body': 'Server debugging'})
