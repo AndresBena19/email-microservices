@@ -8,27 +8,26 @@ def callback(ch, method, properties, body):
 
     send_data = '[{}] {} {}'.format(data['type'], data['code'], data['body'])
 
-    if data['type'] == 'Error':
-        print('Sending email')
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login('ivanspoof@gmail.com', 'ghdqzh30db2')
-        server.sendmail('ivanspoo@gmail.com', 'ivanspoof@gmail.com', send_data)
-        server.quit()
+    print('Sending email')
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login('ivanspoof@gmail.com', 'ghdqzh30db2')
+    server.sendmail('ivanspoo@gmail.com', 'ivanspoof@gmail.com', send_data)
+    server.quit()
 
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 if __name__ == "__main__":
     with pika.BlockingConnection(pika.ConnectionParameters('localhost')) as connection:
         channel = connection.channel()
-        channel.exchange_declare(exchange="logs", exchange_type='fanout')
+        channel.exchange_declare(exchange="logs", exchange_type='direct')
 
         result = channel.queue_declare(exclusive=True)
 
         queue_name = result.method.queue
 
-        channel.queue_bind(exchange="logs", queue=queue_name)
+        channel.queue_bind(exchange="logs", queue=queue_name, routing_key="Error")
 
         print('[*] starting worker with queue {}'.format(queue_name))
 
