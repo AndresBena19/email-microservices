@@ -1,12 +1,11 @@
 import pika
 import json
-import smtplib
 
 
 def callback(ch, method, properties, body):
     data = json.loads(body)
 
-    send_data = '[{}],{}:{}'.format(data['type'], data['code'], data['body'])
+    send_data = '[{}] {}:{}'.format(data['type'], data['code'], data['body'])
 
     print("Writing log")
     with open('log.txt','a') as f:

@@ -1,3 +1,7 @@
 [Error],12345:Server Error
 [Degug],12345:Server info
-[Error],12345:Server exploit[Error],12345:,Server exploit[Error],12345:,Server exploit
+[Error],12345:Server exploit
+[Error],12345:Server exploit
+[Error],12345:Server exploit
+[Error] 12345:Server exploit
+[Error] 12345:Server exploit
