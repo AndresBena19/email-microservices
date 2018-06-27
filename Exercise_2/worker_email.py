@@ -13,8 +13,10 @@ def callback(ch, method, properties, body):
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login('ivanspoof@gmail.com', 'ghdqzh30db2')
-        server.sendmail('ivanspoof@gmail.com', 'ivanspoof@gmail.com', send_data)
+        server.sendmail('ivanspoo@gmail.com', 'ivanspoof@gmail.com', send_data)
         server.quit()
+
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 
