@@ -12,6 +12,7 @@ def importers(ch, method, properties, body):
     server.quit()
 
 
+
 if __name__ == "__main__":
     with pika.BlockingConnection(pika.ConnectionParameters('localhost')) as connection:
         channel = connection.channel()

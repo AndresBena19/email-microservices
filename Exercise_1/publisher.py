@@ -2,6 +2,7 @@ import pika
 import json
 
 if __name__ == "__main__":
+
     with pika.BlockingConnection(pika.ConnectionParameters('localhost')) as connection:
         channel = connection.channel()
         channel.queue_declare(queue="importers")
