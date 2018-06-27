@@ -6,11 +6,13 @@ import smtplib
 def callback(ch, method, properties, body):
     data = json.loads(body)
 
-    send_data = '[{}], {}'.format(data['code'], data['body'])
+    send_data = '[{}],{}:{}'.format(data['type'], data['code'], data['body'])
 
     print("Writing log")
     with open('log.txt','a') as f:
             f.write(send_data)
+
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 
@@ -28,6 +30,6 @@ if __name__ == "__main__":
 
         print('[*] starting worker with queue {}'.format(queue_name))
 
-        channel.basic_consume(callback, queue=queue_name , no_ack=True)
+        channel.basic_consume(callback, queue=queue_name , no_ack=False)
 
         channel.start_consuming()

@@ -13,9 +13,9 @@ if __name__ == "__main__":
 
             exchange="logs",
             routing_key="",
-            body=json.dumps({'type':'Debug',
+            body=json.dumps({'type':'Error',
                              'code':'12345',
-                             'body': 'Server info'})
+                             'body': 'Server exploit'})
         )
 
         print("END")
