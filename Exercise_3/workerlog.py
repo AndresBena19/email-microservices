@@ -11,7 +11,7 @@ def callback(ch, method, properties, body):
     with open('log.txt','a') as f:
             f.write(send_data)
 
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+
 
 
 
@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
         print('[*] starting worker with queue {}'.format(queue_name))
 
-        channel.basic_consume(callback, queue=queue_name , no_ack=False)
+        channel.basic_consume(callback, queue=queue_name , no_ack=True)
 
         channel.start_consuming()
