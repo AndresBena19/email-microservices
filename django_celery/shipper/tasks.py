@@ -1,17 +1,17 @@
 from celery import current_app
 from .models import File_Upload
+from django.contrib.auth.models import User
 
 import pandas as pd
 app = current_app
 
 @app.task()
 def getname(id):
-    from django.contrib.auth.models import User
+
     obj = File_Upload.objects.get(id=id)
     value = pd.read_excel(obj.upload.path)
 
     data = value.to_dict()
-
 
     for _ in range(3000):
         Userval = User.objects.create(id=data['id'][_],

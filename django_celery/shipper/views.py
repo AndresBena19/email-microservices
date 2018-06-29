@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 def upload(request):
     if request.method == 'POST':
         form = FileForm(request.POST, request.FILES)
+
         if form.is_valid():
             form.save()
             return redirect('UPLOAD_FILE')

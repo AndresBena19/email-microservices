@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from shipper import views
 appname = "shipper"
 urlpatterns = [
-    url(r'^file_upload/$', views.upload, name='UPLOAD_FILE'),
+    url(r'^$', views.upload, name='UPLOAD_FILE'),
 ]
 
 if settings.DEBUG:
