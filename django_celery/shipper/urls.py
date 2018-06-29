@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from shipper import views
-
+appname = "shipper"
 urlpatterns = [
     url(r'^file_upload/$', views.upload, name='UPLOAD_FILE'),
 ]

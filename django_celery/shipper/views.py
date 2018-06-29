@@ -10,9 +10,8 @@ def upload(request):
     if request.method == 'POST':
         form = FileForm(request.POST, request.FILES)
         if form.is_valid():
-            # file is saved
             form.save()
-            return HttpResponseRedirect('/success/url/')
+            return redirect('UPLOAD_FILE')
     else:
         form = FileForm()
     return render(request, 'formfile.html', {'form': form})
