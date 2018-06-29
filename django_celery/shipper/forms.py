@@ -8,8 +8,6 @@ class FileForm(ModelForm):
         model = File_Upload
         fields = "__all__"
 
-
-
     def save(self, commit=True):
         value = super(FileForm, self).save(commit=False)
         value.save()
