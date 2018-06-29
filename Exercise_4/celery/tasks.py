@@ -1,7 +1,7 @@
 from celery import Celery
 import smtplib
 
-app = Celery("example1", backend="amqp://guest:guest@localhost", broker="amqp://localhost")
+app = Celery()
 
 
 @app.task()
