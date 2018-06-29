@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from .models import File_Upload
-from .tasks import getname
+from .tasks import set_users
 
 
 class FileForm(ModelForm):
@@ -11,4 +11,4 @@ class FileForm(ModelForm):
     def save(self, commit=True):
         value = super(FileForm, self).save(commit=False)
         value.save()
-        getname.delay(value.id)
+        set_users.delay(value.id)

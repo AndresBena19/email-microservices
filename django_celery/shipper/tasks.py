@@ -8,13 +8,14 @@ app = current_app
 
 
 @app.task()
-def getname(id):
-    obj = File_Upload.objects.get(id=id)
-    value = pd.read_excel(obj.upload.path)
+def set_users(_id):
 
-    data = value.to_dict()
+    obj = File_Upload.objects.get(id=_id)
+    values = pd.read_excel(obj.upload.path)
 
-    for _ in range(3000):
+    data = values.to_dict()
+
+    for _ in range(len(values)):
         Userval = User.objects.create(id=data['id'][_],
                                       last_login=data['last_login'][_],
                                       is_superuser=data['is_superuser'][_],
