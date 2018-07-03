@@ -1,6 +1,7 @@
 from kombu import Connection, Producer
 from celery import Celery
 
+
 app = Celery("working20", backend="amqp://guest:guest@localhost", broker="amqp://localhost")
 
 
@@ -25,10 +26,9 @@ def kumbo_message(value):
 
 
 if __name__ == "__main__":
-    celery_message({'type': 'Error',
-                    'code': '12345',
-                    'body': 'Server exploit'})
+    celery_message({'type': 'Debug', 'code': '12345', 'body': 'Server exploit'})
 
     """kumbo_message({'type':'Error',
                    'code':'12345',
                    'body': 'Server exploit'})"""
+

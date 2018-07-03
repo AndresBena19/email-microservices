@@ -1,14 +1,29 @@
 from kombu.common import Broadcast
 from celery import Celery
-from kombu import Consumer
+from kombu import Consumer, Queue
 from celery import bootsteps
 import smtplib
 
-
 app = Celery("working2", backend="amqp://guest:guest@localhost", broker="amqp://localhost")
+app.conf.task_queues = (Broadcast(name='broadcast_tasks'),
+                        Queue('email'),)
 
+app.conf.task_routes = {
+    'tasks.sendmail': {
+    'queue': 'email',
+    }
+}
 
-app.conf.task_queues = (Broadcast(name='broadcast_tasks'),)
+@app.task
+def sendmail(body):
+    send_data = '[{}] {} {}'.format(body['type'], body['code'], body['body'])
+
+    print('Sending email')
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login('ivanspoof@gmail.com', 'ghdqzh30db2')
+    server.sendmail('ivanspoo@gmail.com', 'ivanspoof@gmail.com', "hola")
+    server.quit()
 
 
 class MyConsumerStep(bootsteps.ConsumerStep):
@@ -19,16 +34,14 @@ class MyConsumerStep(bootsteps.ConsumerStep):
                          accept=['json'])]
 
     def handle_message(self, body, message):
-        send_data = '[{}] {} {}'.format(body['type'], body['code'], body['body'])
-
         if body['type'] == 'Error':
-            print('Sending email')
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login('ivanspoof@gmail.com', 'ghdqzh30db2')
-            server.sendmail('ivanspoo@gmail.com', 'ivanspoof@gmail.com', send_data)
-            server.quit()
+            print("call sendmail")
+            sendmail.apply_async((body,),
+                                 queue='email',
+                                 exchange='',
+                                 serializer='json')
 
+            print("task called")
         message.ack()
 
 

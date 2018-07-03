@@ -25,7 +25,7 @@ def kumbo_message(value):
 
 
 if __name__ == "__main__":
-   celery_message({'type':'Error',
+   celery_message({'type':'Debug',
                    'code':'12345',
                    'body': 'Server exploit'})
    """kumbo_message({'type':'Error',
