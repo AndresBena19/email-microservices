@@ -30,6 +30,9 @@ def sendmail(data):
 
 
 
+
+
+
 class MyConsumerStep(bootsteps.ConsumerStep):
     def get_consumers(self, channel):
         return [Consumer(channel,

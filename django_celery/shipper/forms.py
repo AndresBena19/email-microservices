@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from .models import File_Upload
-from .tasks import set_users
-
+from .tasks import set_users,active_user,sendmail
+from celery import chain
 
 class FileForm(ModelForm):
     class Meta:
@@ -11,4 +11,6 @@ class FileForm(ModelForm):
     def save(self, commit=True):
         value = super(FileForm, self).save(commit=False)
         value.save()
-        set_users.delay(value.id)
+
+        chain(set_users.s(value.id), active_user.s(), sendmail.s(_sender='ivanspoof@gmail.com'))()
+
