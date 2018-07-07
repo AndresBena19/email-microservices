@@ -35,14 +35,12 @@ def set_users(_id):
                                       date_joined=data['date_joined'][_])
         Userval.save()
 
-    return {'data':values.to_dict(),'values':len(values)}
+    return {'data':data ,'values':len(values)}
 
 
 
 @app.task()
 def sendmail(path, _sender):
-
-
 
     sender = _sender
     gmail_password = 'ghdqzh30db2'
@@ -95,8 +93,6 @@ def active_user(resp):
 
     print(data)
     print(values)
-
-
 
     active_user = {'id': [],
                    'last_login': [],
