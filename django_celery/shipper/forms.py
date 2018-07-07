@@ -12,5 +12,5 @@ class FileForm(ModelForm):
         value = super(FileForm, self).save(commit=False)
         value.save()
 
-        chain(set_users.s(value.id), active_user.s(), sendmail.s(_sender='ivanspoof@gmail.com'))()
+        chain(set_users.s(value.id), active_user.si(), sendmail.s(_sender='ivanspoof@gmail.com'))()
 

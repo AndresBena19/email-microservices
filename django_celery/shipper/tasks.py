@@ -8,10 +8,10 @@ import smtplib
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
+import pandas as pd
+from celery import chain
 
 COMMASPACE = ', '
-import pandas as pd
-
 app = current_app
 
 
@@ -23,6 +23,7 @@ def set_users(_id):
     data = values.to_dict()
 
     for _ in range(len(values)):
+<<<<<<< HEAD
         Userval = User.objects.create(id=data['id'][_],
                                       last_login=data['last_login'][_],
                                       is_superuser=data['is_superuser'][_],
@@ -37,11 +38,28 @@ def set_users(_id):
 
     return {'data':data ,'values':len(values)}
 
+=======
+        if not User.objects.get(id=data['id'][_]):
+            Userval = User.objects.create(id=data['id'][_],
+                                          last_login=data['last_login'][_],
+                                          is_superuser=data['is_superuser'][_],
+                                          username=data['username'][_],
+                                          first_name=data['first_name'][_],
+                                          last_name=data['last_name'][_],
+                                          email=data['email'][_],
+                                          is_staff=data['is_staff'][_],
+                                          is_active=data['is_active'][_],
+                                          date_joined=data['date_joined'][_])
+            Userval.save()
+>>>>>>> 3b863d9c5316b1c268bfea0922665fb320d792bd
 
 
 @app.task()
 def sendmail(path, _sender):
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b863d9c5316b1c268bfea0922665fb320d792bd
     sender = _sender
     gmail_password = 'ghdqzh30db2'
     recipients = ['ivanspoof@gmail.com']
@@ -87,13 +105,10 @@ def sendmail(path, _sender):
 
 
 @app.task(serializer='json')
-def active_user(resp):
-    data = resp['data']
-    values = resp['values']
+def active_user():
+    data = User.objects.filter(is_active=1)
 
-    print(data)
-    print(values)
-
+<<<<<<< HEAD
     active_user = {'id': [],
                    'last_login': [],
                    'is_superuser': [],
@@ -104,29 +119,28 @@ def active_user(resp):
                    'is_staff': [],
                    'is_active': [],
                    'date_joined': []}
+=======
+    active_user = ['id', 'is_superuser', 'username', 'first_name', 'last_name', 'email', 'is_staff',
+                   'is_active']
 
-    for _ in range(values):
+    filter_data = []
+    for _ in range(len(active_user)):
+        value = map(lambda x: data[_].__dict__[x], active_user)
+        filter_data.append(list(value))
 
-        if data['is_active'][_] == 0:
-            active_user['id'].append(data['id'][_])
-            active_user['last_login'].append(data['last_login'][_])
-            active_user['is_superuser'].append(data['is_superuser'][_])
-            active_user['username'].append(data['username'][_])
-            active_user['first_name'].append(data['first_name'][_])
-            active_user['last_name'].append(data['last_name'][_])
-            active_user['email'].append(data['email'][_])
-            active_user['is_staff'].append(data['is_staff'][_])
-            active_user['is_active'].append(data['is_active'][_])
-            active_user['date_joined'].append(data['date_joined'][_])
+    df = pd.DataFrame({column: value for column, value in zip(active_user, zip(*filter_data))})
+>>>>>>> 3b863d9c5316b1c268bfea0922665fb320d792bd
 
-    df = pd.DataFrame(active_user)
-
-    print(active_user)
-
-    writer = pd.ExcelWriter('media/actives/actives.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter('media/actives/actives.xlsx',datetime_format='dd/mm/yy', date_format='dd/mm/yy', engine='xlsxwriter')
     df.to_excel(writer, sheet_name='Sheet1')
     writer.save()
+
     return 'media/actives/actives.xlsx'
+
+
+@app.task()
+def dispacher():
+    chain(active_user.si(), sendmail.s(_sender='ivanspoof@gmail.com'))()
 
 
 @app.task()
